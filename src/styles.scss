@@ -1,0 +1,65 @@
+@import '~@angular/material/theming';
+@import url('//fonts.googleapis.com/icon?family=Material+Icons');
+
+@include mat-core();
+
+$primary: mat-palette($mat-indigo, 500, A200, A400);
+$accent:  mat-palette($mat-red);
+$warn:    mat-palette($mat-green, 500);
+
+$theme: mat-light-theme($primary, $accent, $warn);
+
+@include angular-material-theme($theme);
+
+html, body {
+    width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: $mat-font-family;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4 {
+    font-weight: normal;
+}
+
+.right-aligned {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.credentials-card {
+    max-width: 600px;
+    margin: 2em auto;
+    a, a:visited {
+        text-decoration: none;
+        color: white;
+    }
+}
+
+.credentials-form mat-form-field {
+    width: 100%;
+}
+
+.credentials-footer {
+    padding: 8px;
+    text-align: center;
+    background: mat-color($warn, A400);;
+}
+
+@media (max-width: 600px) {
+    .credentials-card {
+        margin: 1em;
+    }
+}
+

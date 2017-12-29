@@ -1,0 +1,29 @@
+<mat-card class="credentials-card">
+    <mat-card-title>Sign Up</mat-card-title>
+    <mat-card-subtitle>to start using To-Go</mat-card-subtitle>
+    <mat-card-content>
+
+        <form class="credentials-form">
+            <mat-form-field>
+                <input matInput placeholder="Email" [(ngModel)]="credentials.email" name="email">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'"
+                     [(ngModel)]="credentials.password" name="password">
+                <mat-icon matSuffix (click)="hide = !hide" class="pointer">
+                    {{hide ? 'visibility' : 'visibility_off'}}
+                </mat-icon>
+            </mat-form-field>
+            <div class="right-aligned">
+                <button mat-raised-button color="accent" (click)="signup()">
+                    Sign up
+                </button>
+            </div>
+        </form>
+
+    </mat-card-content>
+    <mat-card-footer class="credentials-footer">
+        Already have an account? <a [routerLink]="['/login']">Sign in</a>
+    </mat-card-footer>
+</mat-card>
+
