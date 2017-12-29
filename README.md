@@ -1,4 +1,17 @@
-# ToGoClient
+For use with [https://github.com/ericharm/to-go-api](https://github.com/ericharm/to-go-api)
+
+If you want to use the API, follow instructions for setting it up and run the server before starting this app.
+
+# to-go-client
+
+`git clone https://github.com/ericharm/to-go-client.git`
+
+`cd to-go-client`
+
+`npm install`
+
+`ng serve`
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.5.
 
