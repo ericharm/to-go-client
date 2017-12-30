@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { CookieService } from 'ngx-cookie';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { AuthService } from './../auth/auth.service';
 import { environment } from '../../environments/environment';
+
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import 'rxjs/add/operator/map';
 
 @Component({
@@ -14,42 +13,40 @@ import 'rxjs/add/operator/map';
 export class LoginComponent implements OnInit {
 
     hide: boolean;
-    credentials: object;
     apiUrl: string;
+    form: FormGroup;
+    private formSubmitAttempt: boolean;
 
-    constructor(private http: Http, private cookieService: CookieService,
-                private router: Router, public snackBar: MatSnackBar) {
+    constructor(
+        private fb: FormBuilder,
+        private authService: AuthService
+    ) {}
+
+    ngOnInit() {
+        this.form = this.fb.group({
+            email: ['', Validators.required],
+            password: ['', Validators.required]
+        });
         this.hide = true;
-        this.credentials = {
-            email: "", password: ""
-        };
         this.apiUrl = environment.apiUrl;
     }
 
-    ngOnInit() {
-    }
 
-    login() {
-        this.http.post(this.apiUrl + "login", this.credentials)
-            .map((res: Response) => {
-                return res.json()
-            }).toPromise().then((res) => {
-                console.log(res);
-                this.cookieService.put("auth_token", res.auth_token);
-                this.router.navigate(['/dashboard']);
-            }).catch(err => {
-                console.log(err);
-                let message = JSON.parse(err._body).message;
-                this.openSnackBar(message, "X")
-            }).finally(() => {
-                //
+    onSubmit() {
+        if (this.form.valid) {
+            this.authService.login(this.form.value, (message: string) => {
+                console.log(message);
             });
+        }
+        this.formSubmitAttempt = true;
     }
 
-    openSnackBar(message: string, action: string) {
-        this.snackBar.open(message, action, {
-            duration: 2000,
-        });
+    isFieldInvalid(field: string) {
+        return (
+            (!this.form.get(field).valid && this.form.get(field).touched) ||
+            (this.form.get(field).untouched && this.formSubmitAttempt)
+        );
     }
 
 }
+

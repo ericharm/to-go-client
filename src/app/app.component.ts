@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { AuthService } from './auth/auth.service';
 
 @Component({
     selector: 'app-root',
@@ -7,4 +9,16 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
+    isLoggedIn$: Observable<boolean>;
+
+    constructor(private authService: AuthService) { }
+
+    ngOnInit() {
+        this.isLoggedIn$ = this.authService.isLoggedIn;
+    }
+
+    onLogout(){
+        this.authService.logout();
+    }
 }
+

@@ -3,19 +3,25 @@
     <mat-card-subtitle>to your To-Go account</mat-card-subtitle>
     <mat-card-content>
 
-        <form class="credentials-form">
+        <form class="credentials-form" [formGroup]="form" (ngSubmit)="onSubmit()">
             <mat-form-field>
-                <input matInput placeholder="Email" [(ngModel)]="credentials.email" name="email">
+                <input matInput placeholder="Email" formControlName="email" required>
+                <mat-error *ngIf="isFieldInvalid('email')">
+                    Invalid email address
+                </mat-error>
             </mat-form-field>
             <mat-form-field>
-                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'"
-                     [(ngModel)]="credentials.password" name="password">
+                <input matInput type="password" placeholder="Password"
+                       formControlName="password" required>
                 <mat-icon matSuffix (click)="hide = !hide" class="pointer">
                     {{hide ? 'visibility' : 'visibility_off'}}
                 </mat-icon>
+                <mat-error *ngIf="isFieldInvalid('email')">
+                    Invalid password
+                </mat-error>
             </mat-form-field>
             <div class="right-aligned">
-                <button mat-raised-button color="accent" (click)="login()">
+                <button mat-raised-button color="accent">
                     Sign In
                 </button>
             </div>

@@ -6,6 +6,7 @@
     <span class="fill-remaining-space"></span>
 
     <span id="nav-right">
+        <span *ngIf="isLoggedIn$ | async" (click)="onLogout()" class="pointer">Log out</span>
     </span>
 </mat-toolbar>
 

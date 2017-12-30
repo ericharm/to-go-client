@@ -6,23 +6,15 @@ import { RouterModule } from '@angular/router';
 import { ROUTES } from './app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { shim } from 'promise.prototype.finally'; shim();
-
-import {
-    MatToolbarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatCardModule
-} from '@angular/material';
-
+import { AppMaterialModule } from './app-material/app-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth.guard';
 
 
 @NgModule({
@@ -40,18 +32,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         RouterModule.forRoot(ROUTES),
         FormsModule,
         ReactiveFormsModule,
-
-        MatToolbarModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatSnackBarModule,
-        MatCardModule,
+        AppMaterialModule,
         BrowserAnimationsModule
     ],
     providers: [
-    ],
+    AuthService,
+    AuthGuard],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
