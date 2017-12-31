@@ -1,34 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Resource, ResourceParams, ResourceAction, IResourceMethod, ResourceHandler } from '@ngx-resource/core';
+import { ResourceParams, ResourceAction, IResourceMethod, ResourceHandler } from '@ngx-resource/core';
+import { AuthResource } from '../auth/auth.resource';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
+import { Todo } from './todo';
 
 @Injectable()
 @ResourceParams({
     url: environment.apiUrl,
     pathPrefix: 'todos'
 })
-export class TodoResource extends Resource {
-
-    authToken: string
+export class TodoResource extends AuthResource {
 
     @ResourceAction({
-        // IResourceAction
         isArray: true,
         path: '/'
     })
-    index: IResourceMethod<any, any>;
+    index: IResourceMethod<void, Todo[]>;
 
     constructor(restHandler: ResourceHandler, auth: AuthService) {
-        super(restHandler);
-        this.authToken = auth.authToken;
-    }
-
-    $getHeaders(methodOptions?: any): any {
-        const headers: any = {};
-        headers["X-AUTH-TOKEN"] = this.authToken;
-        headers["Content-Type"] = 'application/json';
-        return headers;
+        super(restHandler, auth);
     }
 
 }
