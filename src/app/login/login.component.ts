@@ -12,17 +12,17 @@ import 'rxjs/add/operator/map';
 })
 export class LoginComponent implements OnInit {
 
-    hide: boolean;
-    apiUrl: string;
-    form: FormGroup;
+    private hide: boolean;
+    private apiUrl: string;
+    private form: FormGroup;
     private formSubmitAttempt: boolean;
 
-    constructor(
-        private fb: FormBuilder,
-        private authService: AuthService
-    ) {}
+    constructor(private fb: FormBuilder, private authService: AuthService) {
+    }
 
     ngOnInit() {
+        this.authService.hitDashboardIfLoggedIn();
+
         this.form = this.fb.group({
             email: ['', Validators.required],
             password: ['', Validators.required]

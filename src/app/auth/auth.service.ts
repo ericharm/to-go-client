@@ -11,6 +11,7 @@ import 'rxjs/add/operator/map';
 export class AuthService {
     private loggedIn = new BehaviorSubject<boolean>(false);
     private apiUrl: string;
+    public authToken: string = "";
 
     get isLoggedIn() {
         return this.loggedIn.asObservable();
@@ -19,6 +20,11 @@ export class AuthService {
     constructor(private router: Router, private http: Http,
         private cookieService: CookieService) {
 
+        let authToken = this.cookieService.get("auth_token");
+        if (authToken) {
+            this.loggedIn.next(true);
+            this.authToken = authToken;
+        }
         this.apiUrl = environment.apiUrl;
     }
 
@@ -27,9 +33,9 @@ export class AuthService {
         .map((res: Response) => {
             return res.json()
         }).toPromise().then((res) => {
-            console.log(res);
             this.loggedIn.next(true);
             this.cookieService.put("auth_token", res.auth_token);
+            this.authToken = res.auth_token;
             this.router.navigate(['/dashboard']);
         }).catch(err => {
             let body = JSON.parse(err._body);
@@ -41,8 +47,16 @@ export class AuthService {
     }
 
     logout () {
+        this.cookieService.remove("auth_token");
+        this.authToken = "";
         this.loggedIn.next(false);
         this.router.navigate(['/login']);
+    }
+
+    hitDashboardIfLoggedIn() {
+        if (this.authToken) {
+            this.router.navigate(['/dashboard']);
+        }
     }
 }
 

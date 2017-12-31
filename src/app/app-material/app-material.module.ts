@@ -10,6 +10,8 @@ import {
     MatCardModule
 } from '@angular/material';
 
+import { MatTableModule } from '@angular/material/table';
+
 @NgModule({
     imports: [CommonModule],
     exports: [
@@ -19,7 +21,8 @@ import {
         MatButtonModule,
         MatIconModule,
         MatSnackBarModule,
-        MatCardModule
+        MatCardModule,
+        MatTableModule
     ]
 })
 export class AppMaterialModule {}

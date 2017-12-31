@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { AuthService } from './../auth/auth.service';
 import { CookieService } from 'ngx-cookie';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -17,7 +18,7 @@ export class SignupComponent implements OnInit {
     credentials: object;
     apiUrl: string;
 
-    constructor(private http: Http, private router: Router,
+    constructor(private http: Http, private router: Router, private authService: AuthService,
                 private cookieService: CookieService, public snackBar: MatSnackBar) {
         this.hide = true;
         this.credentials = {
@@ -27,6 +28,7 @@ export class SignupComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.authService.hitDashboardIfLoggedIn();
     }
 
     signup() {
