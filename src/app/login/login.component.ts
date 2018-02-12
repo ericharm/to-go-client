@@ -13,7 +13,6 @@ import 'rxjs/add/operator/map';
 export class LoginComponent implements OnInit {
 
     private hide: boolean;
-    private apiUrl: string;
     private form: FormGroup;
     private formSubmitAttempt: boolean;
 
@@ -22,15 +21,12 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.authService.hitDashboardIfLoggedIn();
-
         this.form = this.fb.group({
             email: ['', Validators.required],
             password: ['', Validators.required]
         });
         this.hide = true;
-        this.apiUrl = environment.apiUrl;
     }
-
 
     onSubmit() {
         if (this.form.valid) {

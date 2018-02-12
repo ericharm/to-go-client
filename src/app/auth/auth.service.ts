@@ -28,7 +28,7 @@ export class AuthService {
         this.apiUrl = environment.apiUrl;
     }
 
-    login (user: User, onError: (message: string) => void) {
+    login(user: User, onError: (message: string) => void) {
         this.http.post(this.apiUrl + "login", user)
         .map((res: Response) => {
             return res.json()
@@ -46,7 +46,7 @@ export class AuthService {
         });
     }
 
-    logout () {
+    logout() {
         this.cookieService.remove("auth_token");
         this.authToken = "";
         this.loggedIn.next(false);

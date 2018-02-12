@@ -1,0 +1,16 @@
+.mat-table {
+    margin: 1em;
+    border: 1px solid #efefef;
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 1px 1px 3px 0px #cdcdcd;
+}
+
+.mat-cell, .mat-header-cell {
+    flex: 2 1 120px;
+    margin: 1em;
+}
+
+.mat-column-edit {
+     flex: 1 2 40px;
+}
