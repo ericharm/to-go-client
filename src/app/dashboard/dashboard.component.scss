@@ -11,6 +11,13 @@
     margin: 1em;
 }
 
-.mat-column-edit {
+.mat-column-edit, .mat-column-delete, .mat-column-complete, .mat-column-put-back {
      flex: 1 2 40px;
+     .mat-icon {
+        cursor: pointer;
+     }
+}
+
+.expired {
+    color: tomato;
 }

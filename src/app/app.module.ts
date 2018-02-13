@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { shim } from 'promise.prototype.finally'; shim()
 import { AppMaterialModule } from './app-material.module'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+
 import { AppComponent } from './app.component'
 import { SignupComponent } from './signup/signup.component'
 import { LoginComponent } from './login/login.component'

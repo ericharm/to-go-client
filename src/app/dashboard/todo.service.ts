@@ -30,6 +30,18 @@ export class TodoResource extends AuthResource {
   })
   save: IResourceMethod<Todo, Todo>;
 
+  @ResourceAction({
+    method: ResourceRequestMethod.Put,
+    path: '/{!id}'
+  })
+  update: IResourceMethod<Todo, Todo>;
+
+  @ResourceAction({
+    method: ResourceRequestMethod.Delete,
+    path: '/{!id}'
+  })
+  delete: IResourceMethod<Todo, Todo>;
+
   constructor(restHandler: ResourceHandler, auth: AuthService) {
     super(restHandler, auth)
   }

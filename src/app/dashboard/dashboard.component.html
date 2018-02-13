@@ -1,61 +1,119 @@
+<mat-tab-group>
+  <mat-tab label="Tasks">
+    <mat-table #table [dataSource]="todosDataSource">
 
-<mat-table #table [dataSource]="dataSource">
+      <ng-container matColumnDef="title">
+          <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+          <mat-cell *matCellDef="let todo"> {{todo.title}} </mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-      <mat-cell *matCellDef="let todo"> {{todo.title}} </mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+          <mat-cell *matCellDef="let todo"> {{todo.description}} </mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="description">
-      <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-      <mat-cell *matCellDef="let todo"> {{todo.description}} </mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="due">
+          <mat-header-cell *matHeaderCellDef> Due </mat-header-cell>
+          <mat-cell *matCellDef="let todo" [ngClass]="{'expired': isExpired(todo.due) }">
+            {{todo.due}}
+          </mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="due">
-      <mat-header-cell *matHeaderCellDef> Due </mat-header-cell>
-      <mat-cell *matCellDef="let todo"> {{todo.due}} </mat-cell>
-  </ng-container>
+      <ng-container matColumnDef="edit">
+          <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+          <mat-cell *matCellDef="let todo">
+              <mat-icon color="warning">edit</mat-icon>
+          </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="delete">
+          <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+          <mat-cell *matCellDef="let todo">
+              <mat-icon color="accent" (click)="delete(todo)">delete</mat-icon>
+          </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="complete">
+          <mat-header-cell *matHeaderCellDef> Complete </mat-header-cell>
+          <mat-cell *matCellDef="let todo">
+              <mat-icon color="primary" (click)="complete(todo)">assignment_turned_in</mat-icon>
+          </mat-cell>
+      </ng-container>
 
-  <ng-container matColumnDef="edit" class="edit-cells">
-      <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-          <mat-icon color="accent">edit</mat-icon>
-      </mat-cell>
-  </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
 
-</mat-table>
+    <mat-grid-list cols="12" rowHeight="100px">
+      <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="todos.length===0">
+        <span>Your to-do list is empty</span>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="!createFormEnabled">
+        <button (click)="enableCreateForm()" mat-raised-button color="primary">
+          Add a task
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="createFormEnabled">
+        <form>
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Task" value="" [(ngModel)]="newTodo.title"
+              name="title">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Description" value=""
+              [(ngModel)]="newTodo.description" name="description">
+          </mat-form-field>
+          <label>
+              When:
+              <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
+                [min]="now" [(ngModel)]="newTodo.due" name="due">
+              <owl-date-time #dt></owl-date-time>
+          </label>
+          <div class="button-row">
+            <button mat-raised-button color="warn" (click)="addTask()">Add</button>
+          </div>
+        </form>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-tab>
 
-<mat-grid-list cols="12" rowHeight="100px">
-  <mat-grid-tile [colspan]="12" [rowspan]="1">
-    <span *ngIf="todos.length===0">Your to-do list is empty</span>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="!createFormEnabled">
-    <button (click)="enableCreateForm()" mat-raised-button color="primary">
-      Add a task
-    </button>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="createFormEnabled">
-    <form>
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Task" value="" [(ngModel)]="newTodo.title"
-          name="title">
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <input matInput placeholder="Description" value=""
-          [(ngModel)]="newTodo.description" name="description">
-      </mat-form-field>
-      <label>
-          When:
-          <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
-            [min]="now" [(ngModel)]="newTodo.due" name="due">
-          <owl-date-time #dt></owl-date-time>
-      </label>
-      <div class="button-row">
-        <button mat-raised-button color="accent" (click)="addTask()">Add</button>
-      </div>
-    </form>
-  </mat-grid-tile>
-</mat-grid-list>
+  <mat-tab label="Archived">
+    <mat-table #table [dataSource]="archivedDataSource">
+
+      <ng-container matColumnDef="title">
+          <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+          <mat-cell *matCellDef="let todo"> {{todo.title}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+          <mat-cell *matCellDef="let todo"> {{todo.description}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="due">
+          <mat-header-cell *matHeaderCellDef> Due </mat-header-cell>
+          <mat-cell *matCellDef="let todo"> {{todo.due}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+          <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+          <mat-cell *matCellDef="let todo">
+              <mat-icon color="accent" (click)="delete(todo)">delete</mat-icon>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="put back">
+          <mat-header-cell *matHeaderCellDef> Put Back </mat-header-cell>
+          <mat-cell *matCellDef="let todo">
+              <mat-icon color="primary" (click)="putBack(todo)">
+                settings_backup_restore
+              </mat-icon>
+          </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="archivedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: archivedColumns;"></mat-row>
+
+    </mat-table>
+
+  </mat-tab>
+</mat-tab-group>
