@@ -4,25 +4,33 @@
 
       <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-          <mat-cell *matCellDef="let todo"> {{todo.title}} </mat-cell>
+          <mat-cell *matCellDef="let todo">
+            <span *ngIf="!todo.editing">{{todo.title}}</span>
+            <input type="text" [(ngModel)]="todo.title" *ngIf="todo.editing" />
+          </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="description">
           <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-          <mat-cell *matCellDef="let todo"> {{todo.description}} </mat-cell>
+          <mat-cell *matCellDef="let todo">
+            <span *ngIf="!todo.editing">{{todo.description}}</span>
+            <input type="text" [(ngModel)]="todo.description" *ngIf="todo.editing" />
+          </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="due">
           <mat-header-cell *matHeaderCellDef> Due </mat-header-cell>
           <mat-cell *matCellDef="let todo" [ngClass]="{'expired': isExpired(todo.due) }">
-            {{todo.due}}
+            <span *ngIf="!todo.editing">{{todo.due}}</span>
+            <owl-date-time-inline [(ngModel)]="todo.due" *ngIf="todo.editing"></owl-date-time-inline>
           </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="edit">
           <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
           <mat-cell *matCellDef="let todo">
-              <mat-icon color="warning">edit</mat-icon>
+              <mat-icon color="warning" (click)="edit(todo)" *ngIf="!todo.editing">edit</mat-icon>
+              <mat-icon color="warn" (click)="update(todo)" *ngIf="todo.editing">save</mat-icon>
           </mat-cell>
       </ng-container>
       <ng-container matColumnDef="delete">
@@ -43,7 +51,7 @@
 
     </mat-table>
 
-    <mat-grid-list cols="12" rowHeight="100px">
+    <mat-grid-list cols="12" rowHeight="{{getFormHeight()}}">
       <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="todos.length===0">
         <span>Your to-do list is empty</span>
       </mat-grid-tile>
@@ -52,7 +60,7 @@
           Add a task
         </button>
       </mat-grid-tile>
-      <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="createFormEnabled">
+      <mat-grid-tile [colspan]="12" [rowspan]="1" *ngIf="createFormEnabled" class="form-container">
         <form>
           <mat-form-field class="full-width">
             <input matInput placeholder="Task" value="" [(ngModel)]="newTodo.title"
@@ -61,14 +69,15 @@
           <mat-form-field class="full-width">
             <input matInput placeholder="Description" value=""
               [(ngModel)]="newTodo.description" name="description">
-          </mat-form-field>
+          </mat-form-field><br/>
           <label>
               When:
               <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
                 [min]="now" [(ngModel)]="newTodo.due" name="due">
               <owl-date-time #dt></owl-date-time>
-          </label>
-          <div class="button-row">
+          </label><br/>
+          <div class="button-row buttons-row">
+            <button mat-raised-button color="accent" (click)="createFormEnabled=false">Cancel</button>
             <button mat-raised-button color="warn" (click)="addTask()">Add</button>
           </div>
         </form>

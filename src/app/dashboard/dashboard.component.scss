@@ -12,7 +12,7 @@
 }
 
 .mat-column-edit, .mat-column-delete, .mat-column-complete, .mat-column-put-back {
-     flex: 1 2 40px;
+     flex: 1 0 40px;
      .mat-icon {
         cursor: pointer;
      }
@@ -20,4 +20,24 @@
 
 .expired {
     color: tomato;
+}
+
+.buttons-row {
+  margin: 1em 0;
+}
+
+@media (max-width: 600px) {
+  form {
+    margin: 1em;
+  }
+  .mat-header-row, .mat-row {
+    padding: 0;
+  }
+  .mat-cell, .mat-header-cell {
+    margin: 0.5em;
+  }
+  .mat-column-delete {
+    display: none;
+  }
+
 }

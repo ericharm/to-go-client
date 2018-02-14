@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   constructor(public snackBar: MatSnackBar, private todoResource: TodoResource) {
     this.todosDataSource = new MatTableDataSource<Todo>(this.todos)
     this.archivedDataSource = new MatTableDataSource<Todo>(this.archived)
-    this.newTodo = { title: '', description: '', due: Date(), completed: false, id: null }
+    this.newTodo = this.resetNewTodo()
   }
 
   ngOnInit() {
@@ -68,11 +68,27 @@ export class DashboardComponent implements OnInit {
       this.todos.push(Object.assign({}, res))
       this.formatDates()
       this.todosDataSource = new MatTableDataSource<Todo>(this.todos)
-      this.newTodo = { title: '', description: '', due: Date(), completed: false, id: null }
+      this.newTodo = this.resetNewTodo()
       this.createFormEnabled = false
     }).catch(err => {
       console.log(err)
       this.openSnackBar('Unable to create new task', 'ERROR')
+    })
+  }
+
+  edit(todo) {
+    todo.editing = true
+  }
+
+  update(todo) {
+    todo.editing = false
+    this.todoResource.update(todo).then(res => {
+      console.log(res)
+      this.formatDates()
+      this.openSnackBar("'" + todo.title + "' has been updated", 'Success!')
+    }).catch(err => {
+      console.log(err)
+      this.openSnackBar('Could not update ' + todo.title + '.', 'ERROR')
     })
   }
 
@@ -124,7 +140,22 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  openSnackBar(message: string, action: string) {
+  getFormHeight() {
+    return this.createFormEnabled ? '200px' : '100px'
+  }
+
+  private resetNewTodo() {
+    return {
+      title: '',
+      description: '',
+      due: Date(),
+      completed: false,
+      id: null,
+      editing: false
+    }
+  }
+
+  private openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 2000,
     })

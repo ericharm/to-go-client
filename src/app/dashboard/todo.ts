@@ -4,4 +4,5 @@ export interface Todo {
     due: string
     completed: boolean
     id: number
+    editing: boolean
 }
